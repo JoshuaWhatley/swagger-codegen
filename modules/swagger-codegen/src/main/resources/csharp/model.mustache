@@ -18,14 +18,19 @@ namespace {{packageName}}.Model
     /// </summary>
     [DataContract]
     public partial class {{classname}} : {{#parent}}{{{parent}}}, {{/parent}} IEquatable<{{classname}}>
-    { {{#vars}}{{#isEnum}}
-
+    {
+    {{#vars}}{{#isEnum}}
         /// <summary>
-        /// {{^description}}Gets or Sets {{{name}}}{{/description}}{{#description}}{{{description}}}{{/description}}
+        /// {{^description}}{{{name}}} enumeration values{{/description}}{{#description}}{{{description}}}{{/description}}
         /// </summary>{{#description}}
         /// <value>{{{description}}}</value>{{/description}}
         [JsonConverter(typeof(StringEnumConverter))]
 {{>enumClass}}{{/isEnum}}{{#items.isEnum}}{{#items}}
+        /// <summary>
+        /// {{^description}}{{{name}}} enumeration values{{/description}}{{#description}}{{{description}}}{{/description}}
+        /// </summary>{{#description}}
+        /// <value>{{{items.description}}}</value>{{/description}}
+        [JsonConverter(typeof(StringEnumConverter))]
 {{>enumClass}}{{/items}}{{/items.isEnum}}{{/vars}}
     {{#vars}}{{#isEnum}}
         /// <summary>

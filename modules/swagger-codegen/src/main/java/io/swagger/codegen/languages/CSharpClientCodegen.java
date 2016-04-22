@@ -353,9 +353,15 @@ public class CSharpClientCodegen extends AbstractCSharpCodegen {
                 allowableValues.put("enumVars", enumVars);
                 // handle default value for enum, e.g. available => StatusEnum.AVAILABLE
 
-                // HACK: strip ? from enum
+                // HACK: extract enum type
                 if (var.datatypeWithEnum != null) {
-                    var.vendorExtensions.put(DATA_TYPE_WITH_ENUM_EXTENSION, var.datatypeWithEnum.substring(0, var.datatypeWithEnum.length() - 1));
+                    if (var.items != null) {
+                        var.datatype = var.datatypeWithEnum;
+                        String enumType = var.datatypeWithEnum.replace("?", "").replace("List<", "").replace(">", "");
+                        var.items.vendorExtensions.put(DATA_TYPE_WITH_ENUM_EXTENSION, enumType);
+                    } else {
+                        var.vendorExtensions.put(DATA_TYPE_WITH_ENUM_EXTENSION, var.datatypeWithEnum.replace("?", ""));
+                    }
                 }
 
                 if (var.defaultValue != null) {
@@ -372,7 +378,6 @@ public class CSharpClientCodegen extends AbstractCSharpCodegen {
                         var.defaultValue = var.vendorExtensions.get(DATA_TYPE_WITH_ENUM_EXTENSION) + "." + enumName;
                     }
                 }
-
             }
         }
 
